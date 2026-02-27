@@ -6,6 +6,16 @@ if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then
   exit 0
 fi
 
+# Ensure CLAUDE_PROJECT_DIR is set and points to an existing directory
+if [ -z "${CLAUDE_PROJECT_DIR:-}" ]; then
+  echo "Error: CLAUDE_PROJECT_DIR is not set or is empty; aborting session-start hook." >&2
+  exit 1
+fi
+
+if [ ! -d "$CLAUDE_PROJECT_DIR" ]; then
+  echo "Error: CLAUDE_PROJECT_DIR '$CLAUDE_PROJECT_DIR' does not exist or is not a directory; aborting session-start hook." >&2
+  exit 1
+fi
 cd "$CLAUDE_PROJECT_DIR"
 
 # Install Node.js dependencies if present
